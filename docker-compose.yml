@@ -1,0 +1,10 @@
+version: "3.8"
+
+services:
+  vault:
+    image: vaultwarden/server:1.24.0
+    environment:
+      WEBSOCKET_ENABLED: "true"
+    ports:
+      - "8080:80"
+      - "3012:3012"
