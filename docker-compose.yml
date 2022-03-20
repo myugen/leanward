@@ -7,12 +7,14 @@ services:
       WEBSOCKET_ENABLED: "true"
       ADMIN_TOKEN: "EpRVaPgOtn6O6Q7OkwHFVX/ewUdJ3iQfqKj+5SuIX9qs3M7bAc/VPWRNmqU4otVh"
       DATABASE_URL: "postgresql://vault:vault@db:5432/vault"
-    ports:
-      - "8080:80"
-      - "3012:3012"
+    expose:
+      - "80"
+      - "3012"
     depends_on:
       db:
         condition: service_healthy
+      proxy:
+        condition: service_started
 
   db:
     image: postgres:14-bullseye
@@ -23,6 +25,17 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./db:/var/lib/postgresql/data
+      - ./.data/postgres:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U vault"]
+
+  proxy:
+    image: caddy:2
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile.dev:/etc/caddy/Caddyfile:ro
+      - ./certs:/certs
+      - ./.data/caddy/data:/data
+      - ./.data/caddy/config:/config

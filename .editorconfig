@@ -9,3 +9,7 @@ insert_final_newline = true
 [Makefile]
 indent_style = tab
 indent_size = tab
+
+[Caddyfile*]
+indent_style = tab
+indent_size = tab

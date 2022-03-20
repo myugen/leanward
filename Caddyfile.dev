@@ -1,0 +1,15 @@
+vault.local {
+	encode gzip
+
+	# cert
+	tls /certs/vault.local.pem /certs/vault.local-key.pem
+
+	# The negotiation endpoint is also proxied to Rocket
+	reverse_proxy /notifications/hub/negotiate vault:80
+
+	# Notifications redirected to the websockets server
+	reverse_proxy /notifications/hub vault:3012
+
+	# Send all other traffic to the regular Vaultwarden endpoint
+	reverse_proxy vault:80
+}
