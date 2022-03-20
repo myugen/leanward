@@ -1,2 +1,5 @@
 # JetBrains products
 /.idea
+
+# Docker volumes
+/db
